@@ -1,0 +1,362 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "DLOR Acquisition HTTP REST API Documentation",
+        "description": "DLOR Acquisition collect and acquisite the customer data",
+        "version": "1.0.0",
+        "contact": {}
+    },
+    "basePath": "/dlor_acquisition/v1",
+    "paths": {
+        "/generate/loan-app-id": {
+            "post": {
+                "tags": [
+                    "generate"
+                ],
+                "description": "Generate loan app id",
+                "operationId": "GenerateController.Create",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Content-Type",
+                        "description": "Header: Content-Type",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "in": "header",
+                        "name": "x-request-id",
+                        "description": "Header: x-request-id",
+                        "required": true,
+                        "type": "string",
+                        "default": "c0d519ea-c3bd-4818-8f86-8b67dc876457"
+                    },
+                    {
+                        "in": "header",
+                        "name": "x-real-ip",
+                        "description": "Header: x-real-ip",
+                        "required": true,
+                        "type": "string",
+                        "default": "localhost"
+                    },
+                    {
+                        "in": "header",
+                        "name": "x-caller-service",
+                        "description": "Header: x-caller-service",
+                        "required": true,
+                        "type": "string",
+                        "default": "client"
+                    },
+                    {
+                        "in": "header",
+                        "name": "x-caller-domain",
+                        "description": "Header: x-caller-domain",
+                        "required": true,
+                        "type": "string",
+                        "default": "caller-domain"
+                    },
+                    {
+                        "in": "header",
+                        "name": "x-device",
+                        "description": "Header: x-device",
+                        "required": true,
+                        "type": "string",
+                        "default": "android"
+                    },
+                    {
+                        "in": "header",
+                        "name": "datetime",
+                        "description": "Header: datetime",
+                        "required": true,
+                        "type": "string",
+                        "default": "2017-08-24T13:43:56.41906615Z"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Generate loan app id",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/httpstruct.ReqLoanAppID"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/httpstruct.ResLoanAppID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/products/": {
+            "get": {
+                "tags": [
+                    "products"
+                ],
+                "description": "get Products",
+                "operationId": "ProductsController.GetProductList",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/httpstruct.ResInquiryProducts"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "products"
+                ],
+                "description": "create Products",
+                "operationId": "ProductsController.Create",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Products content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/httpstruct.ReqCreateProducts"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{string} create success!"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "products"
+                ],
+                "description": "get Products by id",
+                "operationId": "ProductsController.GetOne",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} get one success!"
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "products"
+                ],
+                "description": "update the Products",
+                "operationId": "ProductsController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} put success!"
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "products"
+                ],
+                "description": "delete the Products",
+                "operationId": "ProductsController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "httpstruct.Product": {
+            "title": "Product",
+            "type": "object",
+            "properties": {
+                "calculation_method": {
+                    "type": "string"
+                },
+                "interest_rate": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "maximum_loan_amount": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "maximum_term": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "product_code": {
+                    "type": "string"
+                },
+                "product_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "httpstruct.ReqCreateProducts": {
+            "title": "ReqCreateProducts",
+            "type": "object",
+            "properties": {
+                "calculation_method": {
+                    "type": "string"
+                },
+                "interest_rate": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "maximum_loan_amount": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "maximum_term": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "product_code": {
+                    "type": "string"
+                },
+                "product_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "httpstruct.ReqLoanAppID": {
+            "title": "ReqLoanAppID",
+            "type": "object",
+            "properties": {
+                "branch_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "httpstruct.ResInquiryProducts": {
+            "title": "ResInquiryProducts",
+            "type": "object",
+            "properties": {
+                "product": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/httpstruct.Product"
+                    }
+                }
+            }
+        },
+        "httpstruct.ResLoanAppID": {
+            "title": "ResLoanAppID",
+            "type": "object",
+            "properties": {
+                "application_id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "generate",
+            "description": "GenerateController operations for Generate\n"
+        },
+        {
+            "name": "products",
+            "description": "ProductsController operations for Products\n"
+        }
+    ]
+}
