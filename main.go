@@ -36,7 +36,7 @@ type MyBodyObj struct {
 }
 
 var (
-	dir = flag.String("dir", "", "a directory")
+	dir = flag.String("dir", "swagger", "a directory")
 )
 
 func init() {
