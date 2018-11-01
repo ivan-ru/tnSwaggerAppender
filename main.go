@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -30,6 +31,12 @@ type Response struct {
 	Error  BodyArray `json:"error"`
 }
 
+// ResponseErr ...
+type ResponseErr struct {
+	RsBody BodyObjNull `json:"rsBody"`
+	Error  BodyArray   `json:"error"`
+}
+
 // FilterErrorCode ...
 type FilterErrorCode struct {
 	Code    BodyBasicType `json:"errorCode"`
@@ -40,6 +47,12 @@ type FilterErrorCode struct {
 type BodyObj struct {
 	Type       string      `json:"type"`
 	Properties interface{} `json:"properties"`
+}
+
+// BodyObjNull ...
+type BodyObjNull struct {
+	Type     string `json:"type"`
+	Nullable string `json:"nullable"`
 }
 
 // BodyArray ...
@@ -79,9 +92,18 @@ func main() {
 		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(structName)), "req") {
 			currentStruct["properties"] = Request{RqBody: BodyObj{Type: "object", Properties: tempProp}}
 		} else if strings.HasPrefix(strings.ToLower(strings.TrimSpace(structName)), "res") {
-			currentStruct["properties"] = Response{
-				RsBody: BodyObj{Type: "object", Properties: tempProp},
-				Error:  BodyArray{Type: "array", Items: BodyObj{Type: "object", Properties: FilterErrorCode{Code: BodyBasicType{Type: "string"}, Message: BodyBasicType{Type: "string"}}}},
+			fmt.Println("tempProp")
+			fmt.Println(tempProp)
+			if tempProp == nil {
+				currentStruct["properties"] = ResponseErr{
+					RsBody: BodyObjNull{Type: "object", Nullable: "true"},
+					Error:  BodyArray{Type: "array", Items: BodyObj{Type: "object", Properties: FilterErrorCode{Code: BodyBasicType{Type: "string"}, Message: BodyBasicType{Type: "string"}}}},
+				}
+			} else {
+				currentStruct["properties"] = Response{
+					RsBody: BodyObj{Type: "object", Properties: tempProp},
+					Error:  BodyArray{Type: "array", Items: BodyObj{Type: "object", Properties: FilterErrorCode{Code: BodyBasicType{Type: "string"}, Message: BodyBasicType{Type: "string"}}}},
+				}
 			}
 		} else {
 			currentStruct["properties"] = tempProp
