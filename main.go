@@ -19,20 +19,38 @@ type Definition struct {
 	Properties interface{} `json:"properties"`
 }
 
-// MyRequest ...
-type MyRequest struct {
-	RqBody MyBodyObj `json:"rqBody"`
+// Request ...
+type Request struct {
+	RqBody BodyObj `json:"rqBody"`
 }
 
-// MyResponse ...
-type MyResponse struct {
-	RsBody MyBodyObj `json:"rsBody"`
+// Response ...
+type Response struct {
+	RsBody BodyObj   `json:"rsBody"`
+	Error  BodyArray `json:"error"`
 }
 
-// MyBodyObj ...
-type MyBodyObj struct {
+// FilterErrorCode ...
+type FilterErrorCode struct {
+	Code    BodyBasicType `json:"errorCode"`
+	Message BodyBasicType `json:"errorDesc"`
+}
+
+// BodyObj ...
+type BodyObj struct {
 	Type       string      `json:"type"`
 	Properties interface{} `json:"properties"`
+}
+
+// BodyArray ...
+type BodyArray struct {
+	Type  string      `json:"type"`
+	Items interface{} `json:"items"`
+}
+
+// BodyBasicType ...
+type BodyBasicType struct {
+	Type string `json:"type"`
 }
 
 var (
@@ -59,9 +77,12 @@ func main() {
 		tempProp := currentStruct["properties"]
 		structName := strings.Split(i, ".")[1]
 		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(structName)), "req") {
-			currentStruct["properties"] = MyRequest{RqBody: MyBodyObj{Type: "object", Properties: tempProp}}
+			currentStruct["properties"] = Request{RqBody: BodyObj{Type: "object", Properties: tempProp}}
 		} else if strings.HasPrefix(strings.ToLower(strings.TrimSpace(structName)), "res") {
-			currentStruct["properties"] = MyResponse{RsBody: MyBodyObj{Type: "object", Properties: tempProp}}
+			currentStruct["properties"] = Response{
+				RsBody: BodyObj{Type: "object", Properties: tempProp},
+				Error:  BodyArray{Type: "array", Items: BodyObj{Type: "object", Properties: FilterErrorCode{Code: BodyBasicType{Type: "string"}, Message: BodyBasicType{Type: "string"}}}},
+			}
 		} else {
 			currentStruct["properties"] = tempProp
 		}
